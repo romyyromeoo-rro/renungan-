@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Renungan Hari ini</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { height: 100%; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+    
+    body {
+      background: url('hutan.jpg') center/cover no-repeat;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 90%;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin: 20px 0;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .emoji { font-size: 3em; margin-bottom: 10px; }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 100%;
+    }
+
+    .slide {
+      min-width: 100%;
+      padding: 30px 20px;
+      font-size: 1.3em;
+      line-height: 1.6;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    }
+
+    .read-more {
+      display: block;
+      margin-top: 15px;
+      color: #a0d8ff;
+      text-decoration: underline;
+      font-size: 0.9em;
+    }
+
+    .dots {
+      margin-top: 15px;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin: 0 5px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .dot.active {
+      background: white;
+    }
+
+    /* Responsif */
+    @media (max-width: 480px) {
+      h1 { font-size: 1.8em; }
+      .slide { font-size: 1.1em; padding: 20px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="emoji">praying_hands</div>
+    <h1>Doa Pagi Ini</h1>
+
+    <div class="slider">
+      <div class="slides">
+        <div class="slide">
+          <span class="prayer-text">Isi doamu di sini...</span>
+          <a href="#" class="read-more">Baca selengkapnya</a>
+        </div>
+        <div class="slide">
+          <span class="prayer-text">Ya Tuhan, berikan kekuatan hari ini...</span>
+          <a href="#" class="read-more">Baca selengkapnya</a>
+        </div>
+        <div class="slide">
+          <span class="prayer-text">Terima kasih atas berkat-Mu...</span>
+          <a href="#" class="read-more">Baca selengkapnya</a>
+        </div>
+      </div>
+
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    let current = 0;
+
+    const prayers = [
+      "Isi doamu di sini...",
+      "Ya Tuhan, berikan kekuatan hari ini...",
+      "Terima kasih atas berkat-Mu..."
+    ];
+
+    // Geser otomatis tiap 5 detik
+    setInterval(nextSlide, 5000);
+
+    function nextSlide() {
+      current = (current + 1) % slides.length;
+      updateSlide();
+    }
+
+    function prevSlide() {
+      current = (current - 1 + slides.length) % slides.length;
+      updateSlide();
+    }
+
+    function updateSlide() {
+      slides.forEach((s, i) => {
+        s.style.transform = `translateX(${(i - current) * 100}%)`;
+      });
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+      document.querySelectorAll('.prayer-text').forEach((el, i) => {
+        el.textContent = prayers[i];
+      });
+    }
+
+    // SWIPE PAKAI TANGAN (TANPA PANAH!)
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    document.addEventListener('touchstart', e => {
+      touchstartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+      touchendX = e.changedTouches[0].screenX;
+      const diff = touchstartX - touchendX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+    }, { passive: true });
+
+    // Inisialisasi
+    updateSlide();
+  </script>
+
+</body>
+</html>
